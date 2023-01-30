@@ -1,0 +1,19 @@
+Metadata-Version: 2.1
+Name: django-multiplechoicefield
+Version: 1.0.1
+Summary: A Package for Django which adds a MultipleChoiceField for Models.
+Home-page: https://github.com/oruehenbeck/django-multiplechoicefield
+Author: Olaf Ruehenbeck
+Author-email: olaf+pip@ruehenbeck.org
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Framework :: Django
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+
+This Package installs a Django Modelfield which takes a standard Django choices list and turns it into a MultipleChoiceField.
+
+

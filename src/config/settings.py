@@ -25,6 +25,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # local
+    'account.apps.AccountConfig',
+    'chat.apps.ChatConfig',
+    'complaints.apps.ComplaintsConfig',
+    'product.apps.ProductConfig',
+    'tariffs.apps.TariffsConfig',
+    'wishlist.apps.WishlistConfig',
+
+    # glabal
+    'rest_framework',
+    'multiselectfield',
 ]
 
 MIDDLEWARE = [
