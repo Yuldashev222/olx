@@ -5,7 +5,9 @@ from api.v1.accounts.validators import validate_phone
 
 
 class CustomUser(AbstractUser):
-    phone_number = models.CharField(max_length=13, unique=True, validators=[validate_phone])
+    phone_number = models.CharField(max_length=13, blank=True, validators=[validate_phone])
+    email = models.EmailField(unique=True)
+    balance = models.FloatField()  # kamida 0 bolishi kerak
 
     # edu1_name
     # edu1_yu

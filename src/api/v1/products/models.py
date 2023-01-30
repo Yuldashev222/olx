@@ -19,4 +19,3 @@ class ProductField(models.Model):
 
 
 class Product(models.Model):
-
