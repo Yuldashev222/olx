@@ -27,7 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # local
-    'account.apps.AccountConfig',
+    'accounts.apps.AccountsConfig',
     'chat.apps.ChatConfig',
     'complaints.apps.ComplaintsConfig',
     'product.apps.ProductConfig',
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     # glabal
     'rest_framework',
     'multiselectfield',
+    'languages',
 ]
 
 MIDDLEWARE = [

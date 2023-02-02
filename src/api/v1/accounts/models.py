@@ -1,17 +1,21 @@
+from random import randint
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from multiselectfield import MultiSelectField
+from django.core.validators import MinValueValidator
+from languages.fields import LanguageField
 
-from api.v1.accounts.validators import validate_phone
+from .validators import validate_phone
 from .servises import upload_avatar_path, upload_resume_path
-from .enums import Licences
+from .enums import Licences, LanguageLevel
 
 
 class CustomUser(AbstractUser):
+    __id = models.CharField(max_length=8, unique=True)
     username = None
     phone_number = models.CharField(max_length=13, blank=True, validators=[validate_phone])
-    email = models.EmailField(unique=True)
-    balance = models.FloatField(default=0)  # kamida 0 bolishi kerak
+    email = models.EmailField(unique=True, blank=True)
+    balance = models.FloatField(default=0, validators=[MinValueValidator(0.0)])
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -38,8 +42,15 @@ class CustomUser(AbstractUser):
     edu2_start_date = models.DateField(blank=True, null=True)
     edu2_end_date = models.DateField(blank=True, null=True)
     edu2_now = models.BooleanField(default=False)
-    license_category = MultiSelectField(choices=Licences)
+
+    license_category = MultiSelectField(choices=Licences, blank=True)
     is_deleted = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        self.__id = randint(10000000, 99999999)
+        while CustomUser.objects.filter(__id=self.__id):
+            self.__id = randint(10000000, 99999999)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         if self.get_full_name():
@@ -47,25 +58,15 @@ class CustomUser(AbstractUser):
         return self.email
 
 
-class Language(models.Model):
-    LANGUAGE_CHOICE = (
-        ('uz', 'Uzbek'),
-        ('en', 'English'),
-        ('gr', 'German'),
-    )
-    name = models.CharField(max_length=2, choices=LANGUAGE_CHOICE)
-
-
 class UserLanguage(models.Model):
-    LEVEL_CHOICE = [
-        ('il', 'Ilg\'or'),
-        ('bo', 'Boshlang\'ich'),
-        ('er', 'Erkin'),
-        ('or', 'O\'rta')
-    ]
-    language = models.ForeignKey(Language, on_delete=models.PROTECT)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    level = models.CharField(max_length=2, choices=LEVEL_CHOICE)
+    language = LanguageField()
+    level = models.CharField(max_length=4 ,choices=LanguageLevel)
+    date_created = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.language
+
 
 
 class Experience(models.Model):
@@ -75,5 +76,9 @@ class Experience(models.Model):
     work_end_date = models.DateField(blank=True, null=True)
     work_now = models.BooleanField(default=False)
     work_duties = models.CharField(max_length=500, blank=True)
+    date_created = models.DateField(auto_now_add=True)
 
     user = models.ForeignKey(CustomUser, related_name='experiences', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.role

@@ -8,3 +8,6 @@ def upload_resume_path(instance, resume):
 
 def upload_tariff_path(instance, logo):
     return f'tariff/{instance.name}/{logo}'
+
+def upload_product_path(instance, image):
+    return f'products/{instance.author.USERNAME_FIELD}/{instance.title}/{image}'

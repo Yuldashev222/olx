@@ -13,4 +13,14 @@ class Licences(Enum):
 
     @classmethod
     def choices(cls):
-        return ((_.name, _.value) for _ in cls)
+        return ((i.name, i.value) for i in cls)
+
+class LanguageLevel(Enum):
+    il = 'Ilg\'or'
+    bo = 'Boshlang\'ich'
+    er = 'Erkin'
+    orta = 'O\'rta'
+
+    @classmethod
+    def choices(cls):
+        return ((i.name, i.value) for i in cls)
