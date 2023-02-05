@@ -3,13 +3,13 @@ from random import sample
 from django.core.validators import MinValueValidator
 
 from api.v1.accounts.models import CustomUser
+from api.v1.accounts.services import upload_product_path
 from api.v1.accounts.validators import validate_phone
 from .enums import ValueType, Status
-from accounts.servises import upload_product_path
 
 
 class Category(models.Model):
-    parent = models.ForeignKey('self', on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=200, unique=True)
     date_created = models.DateField(auto_now_add=True)
     is_active = models.BooleanField(default=False)
@@ -29,7 +29,7 @@ class Field(models.Model):
     name = models.CharField(max_length=150, unique=True)
     date_created = models.DateField(auto_now_add=True)
 
-    creator = models.ForeignKey(CustomUser, related_name='categories', on_delete=models.PROTECT)
+    # creator = models.ForeignKey(CustomUser, related_name='categoriesField', on_delete=models.PROTECT)
 
     def save(self, *args, **kwargs):
         self.name = ' '.join(self.name.strip().split())
@@ -40,12 +40,12 @@ class Field(models.Model):
 
 
 class Product(models.Model):
-    __id = models.CharField(max_length=8, unique=True)
+    number_id = models.CharField(max_length=8, unique=True)
     author = models.ForeignKey(CustomUser, related_name='products', on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     title = models.CharField(max_length=250)
     description = models.TextField(max_length=9000, blank=True)
-    value_type = models.CharField(max_length=1, choices=ValueType)
+    value_type = models.CharField(max_length=1, choices=ValueType.choices())
     price = models.FloatField(default=0, validators=[MinValueValidator(0.0)])
     price_is_dollar = models.BooleanField(default=False)
     agreement = models.BooleanField(default=False)
@@ -56,7 +56,7 @@ class Product(models.Model):
     phone_number = models.CharField(max_length=13, validators=[validate_phone])
     auto_renewal = models.BooleanField(default=False)
     views = models.PositiveSmallIntegerField(default=0)
-    status = models.CharField(max_length=1, choices=Status)
+    status = models.CharField(max_length=2, choices=Status.choices())
     date_created = models.DateField(auto_now_add=True)
     date_update = models.DateField(auto_now_add=True)
 
@@ -72,9 +72,9 @@ class Product(models.Model):
     is_deleted = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        self.__id = sample(range(100), 8)
-        if Product.objects.filter(__id=self.__id).exists():
-            self.__id = sample(range(10), 8)
+        self.number_id = sample(range(100), 8)
+        if Product.objects.filter(number_id=self.number_id).exists():
+            self.number_id = sample(range(10), 8)
         super().save(*args, **kwargs)
 
     def __str__(self):

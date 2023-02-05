@@ -27,12 +27,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # local
-    'accounts.apps.AccountsConfig',
-    'chat.apps.ChatConfig',
-    'complaints.apps.ComplaintsConfig',
-    'product.apps.ProductConfig',
-    'tariffs.apps.TariffsConfig',
-    'wishlist.apps.WishlistConfig',
+    'api.v1.accounts.apps.AccountsConfig',
+    'api.v1.chat.apps.ChatConfig',
+    'api.v1.complaints.apps.ComplaintsConfig',
+    'api.v1.products.apps.ProductsConfig',
+    'api.v1.tariffs.apps.TariffsConfig',
+    'api.v1.wishlist.apps.WishlistConfig',
 
     # glabal
     'rest_framework',
@@ -50,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'src.config.urls'
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
@@ -123,3 +123,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'accounts.CustomUser'

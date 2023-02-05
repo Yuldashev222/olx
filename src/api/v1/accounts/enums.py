@@ -9,11 +9,10 @@ class Licences(Enum):
     b_e = 'B+E'
     c_e = 'c+E'
     d_e = 'D+E'
-    yoq = 'YOQ'
 
     @classmethod
     def choices(cls):
-        return ((i.name, i.value) for i in cls)
+        return [(i.name, i.value) for i in cls]
 
 class LanguageLevel(Enum):
     il = 'Ilg\'or'
@@ -23,4 +22,4 @@ class LanguageLevel(Enum):
 
     @classmethod
     def choices(cls):
-        return ((i.name, i.value) for i in cls)
+        return [(i.name, i.value) for i in cls]

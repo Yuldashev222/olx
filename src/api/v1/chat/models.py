@@ -1,6 +1,6 @@
 from django.db import models
-from accounts.models import CustomUser
-from products.models import Product
+from api.v1.accounts.models import CustomUser
+from api.v1.products.models import Product
 
 
 class Message(models.Model):
