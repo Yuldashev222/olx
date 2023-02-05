@@ -1,7 +1,7 @@
 from django.db import models
-from accounts.servises import upload_tariff_path
-from accounts.models import CustomUser
-from products.models import Product
+from api.v1.accounts.services import upload_tariff_path
+from api.v1.accounts.models import CustomUser
+from api.v1.products.models import Product
 
 
 class Advantage(models.Model):

@@ -6,19 +6,22 @@ from django.core.validators import MinValueValidator
 from languages.fields import LanguageField
 
 from .validators import validate_phone
-from .servises import upload_avatar_path, upload_resume_path
+from .services import upload_avatar_path, upload_resume_path
 from .enums import Licences, LanguageLevel
+from .managers import CustomUserManager
 
 
 class CustomUser(AbstractUser):
-    __id = models.CharField(max_length=8, unique=True)
     username = None
+    number_id = models.CharField(max_length=8, unique=True)
     phone_number = models.CharField(max_length=13, blank=True, validators=[validate_phone])
     email = models.EmailField(unique=True, blank=True)
     balance = models.FloatField(default=0, validators=[MinValueValidator(0.0)])
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['first_name', 'last_name']
+
+    objects = CustomUserManager()
 
     about = models.CharField(max_length=255, blank=True)
     birthdate = models.DateField(blank=True, null=True)
@@ -43,13 +46,13 @@ class CustomUser(AbstractUser):
     edu2_end_date = models.DateField(blank=True, null=True)
     edu2_now = models.BooleanField(default=False)
 
-    license_category = MultiSelectField(choices=Licences, blank=True)
+    license_category = MultiSelectField(choices=Licences.choices(), max_choices=3, max_length=3, blank=True)
     is_deleted = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        self.__id = randint(10000000, 99999999)
-        while CustomUser.objects.filter(__id=self.__id):
-            self.__id = randint(10000000, 99999999)
+        self.number_id = randint(10000000, 99999999)
+        while CustomUser.objects.filter(number_id=self.number_id):
+            self.number_id = randint(10000000, 99999999)
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -60,8 +63,8 @@ class CustomUser(AbstractUser):
 
 class UserLanguage(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    language = LanguageField()
-    level = models.CharField(max_length=4 ,choices=LanguageLevel)
+    language = LanguageField(max_length=100)
+    level = models.CharField(max_length=4 ,choices=LanguageLevel.choices())
     date_created = models.DateField(auto_now_add=True)
 
     def __str__(self):

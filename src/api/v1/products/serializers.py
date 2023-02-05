@@ -2,13 +2,22 @@ from rest_framework import serializers
 from .models import Product, Category, ProductField
 
 
-class CategorySerializer(serializers.ModelSerializer):
+class CategoriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('id', 'name', 'image', 'parent')
+        fields = ('parent', 'name', 'is_active', 'creator')
+        extra_kwargs = {
+            'parent': {'write_only': True},
+            'is_active': {'write_only': True},
+            'creator': {'write_only': True}
+            }
+        
+        def create(self, validated_data):
+            instance = Category.objects.create(**validated_data)
+            return instance
 
 
-class CategoryCreateSerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ('name', 'image', 'parent', 'creator', 'is_active')
